@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Query Rides</title>
+</h:head>
+
+<h:body>
+	<f:view>
+		<h3>Query Rides</h3>
+		<h:form id="queryRidesForm">
+			<table style="margin: 0 auto;">
+				<tr>
+					<!-- Ezkerra -->
+					<td style="vertical-align: top; padding-right: 20px;">
+						<table>
+							<tr>
+								<td>Depart City:</td>
+								<!-- Combo box -->
+								<td><h:selectOneMenu value="#{queryRides.departCity}">
+										<f:selectItem itemLabel="DepartCity" itemValue="" />
+										<f:selectItems value="#{queryRides.departCityList}" />
+										<!--  Para que se actualice el arrival -->
+										<p:ajax
+											listener="#{queryRides.onDepartCityChange}" process="@this"
+											update="arrivalCityMenu queryRidesForm:taulaRidesPosibleak" />
+									</h:selectOneMenu></td>
+							</tr>
+							<tr>
+								<td>Arrival City:</td>
+								<!-- Combo box -->
+								<td><h:selectOneMenu id="arrivalCityMenu"
+										value="#{queryRides.arrivalCity}">
+										<f:selectItem itemLabel="ArrivalCity" itemValue="" />
+										<f:selectItems value="#{queryRides.arrivalCityList}" />
+										<p:ajax process="@this" listener="#{queryRides.reloadRidesTable}" update="queryRidesForm:taulaRidesPosibleak"/>
+									</h:selectOneMenu></td>
+							</tr>
+						</table>
+					</td>
+
+					<!-- Eskubi -->
+					<td style="vertical-align: top; padding-left: 20px;">
+						<table>
+							<tr>
+								<td>Data:</td>
+							</tr>
+							<tr>
+								<td><p:calendar id="data" value="#{queryRides.data}"
+										navigator="true" mode="inline">
+										<p:ajax event="dateSelect"
+											listener="#{queryRides.onDateSelect}" process="@this" update="queryRidesForm:taulaRidesPosibleak mezuak" />
+									</p:calendar></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<table style="margin: auto;">
+				<tr>
+					<td><p:dataTable id="taulaRidesPosibleak"
+							value="#{queryRides.rideslist}" var="item" selectionMode="single"
+							selection="#{queryRides.ride}" border="1" rowKey="#{item.rideNumber}">
+
+							<!-- Para cuando queramos comprar el viaje
+									
+									<p:ajax event="rowSelect" listener="#{queryRides.onEventSelect}"
+										update=":nireForm:aukeratua :nireForm:mezuak :nireForm:zerrenda"></p:ajax>
+										-->
+
+							<f:facet name="header">Rides on selected day:</f:facet>
+							<p:column headerText="Driver">#{item.driver.email}</p:column>
+							<p:column headerText="Seats">#{item.nPlaces}</p:column>
+							<p:column headerText="Price">#{item.price}</p:column>
+						</p:dataTable></td>
+				</tr>
+			</table>
+			<td><h:commandButton value="Back"
+					action="#{queryRides.backHome}" /></td>
+		</h:form>
+
+		<h:messages id="mezuak" style="color:blue" />
+	</f:view>
+</h:body>
+</html>
