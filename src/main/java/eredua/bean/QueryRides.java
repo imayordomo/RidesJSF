@@ -13,10 +13,11 @@ import domain.Ride;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
 @Named("queryRides")
-@SessionScoped
+@ViewScoped
 public class QueryRides implements Serializable{
 	
 	private List<Ride> rideslist; 
@@ -110,7 +111,6 @@ public class QueryRides implements Serializable{
 	
 	public void onDepartCityChange() {
 	    if (departCity != null) {
-	        
 	        arrivalCityList = facade.getDestinationCities(departCity); 
 	    } else {
 	        arrivalCityList = new ArrayList<>();
