@@ -49,7 +49,7 @@ public class HibernateDataAccess {
 				// Create drivers
 				Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez");
 				Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga");
-				Driver driver3 = new Driver("driver3@gmail.com", "Test driver");
+				Driver driver3 = new Driver("a", "a", "a");
 
 				// Create rides
 				driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 4, 7);
@@ -239,4 +239,40 @@ public class HibernateDataAccess {
 			db.close();
 		}
 	}
+	
+	public boolean login(String email, String password) {
+	    EntityManager em = JPAUtil.getEntityManager();
+	    try {
+	        Driver dr = em.find(Driver.class, email);
+	        return dr != null && (password.equals(dr.getPassword()));
+	    } finally {
+	        em.close();
+	    }
+	}
+	
+	public boolean register(String name, String email, String password) {
+	    EntityManager em = JPAUtil.getEntityManager();
+
+	    try {
+	        if (em.find(Driver.class, email) != null) return false;
+
+	        em.getTransaction().begin();
+
+	        Driver d = new Driver();
+	        d.setEmail(email);
+	        d.setName(name);
+	        d.setPassword(password);
+	        em.persist(d);
+	        em.getTransaction().commit();
+	        return true;
+
+	    } catch(Exception ex) {
+	        if (em.getTransaction().isActive()) em.getTransaction().rollback();
+	        return false;
+
+	    } finally {
+	        em.close();
+	    }
+	}
+
 }

@@ -26,6 +26,10 @@ public class CreateRide implements Serializable{
 	private int seats;
 	private float price;
 	BLFacade facade =FacadeBean.getBusinessLogic();
+	String driverEmail = (String) FacesContext.getCurrentInstance()
+            .getExternalContext()
+            .getSessionMap()
+            .get("loginUser");
 	
 	public CreateRide() {
 		
@@ -99,7 +103,7 @@ public class CreateRide implements Serializable{
 	
 	public void createRide() {
 		try {
-			Ride r=facade.createRide(departCity, arrivalCity, data, seats, price, "driver1@gmail.com");
+			Ride r=facade.createRide(departCity, arrivalCity, data, seats, price, driverEmail);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ride sortua. ID:" + r.getRideNumber()));
 		} catch (RideMustBeLaterThanTodayException e) {
 			System.out.print("Bidaia gaurgo egunaren ondoren izan beharko litzake");
