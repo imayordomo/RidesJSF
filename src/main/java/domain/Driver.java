@@ -21,18 +21,31 @@ public class Driver implements Serializable {
 	@Id 
 	private String email;
 	private String name; 
+	private String password;
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST, mappedBy="driver")
 	private List<Ride> rides=new Vector<Ride>();
 
 	public Driver() {
 		super();
 	}
-
 	public Driver(String email, String name) {
 		this.email = email;
 		this.name = name;
 	}
 	
+	public Driver(String email, String name, String password) {
+		this.email = email;
+		this.name = name;
+		this.password = password;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	
 	public String getEmail() {
 		return email;

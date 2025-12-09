@@ -72,5 +72,8 @@ public interface BLFacade  {
 	 */	
 	 public void initializeBD();
 
-	
+	 public boolean login(String email, String password);
+	 
+	 public boolean register(String izena, String email, String pasahitza);
+
 }
