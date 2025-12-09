@@ -53,8 +53,11 @@ public class Register implements Serializable {
 
 	public String erregistratu() {
 
-		if (facade.register(name, email, pasahitza))
+		if (facade.register(name, email, pasahitza)) {
+			FacesContext.getCurrentInstance().getExternalContext()
+            .getSessionMap().put("loginUser", email);
 			return "Ok";
+		}
 		else
 			FacesContext.getCurrentInstance().addMessage(null, 
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "check the data, something is wrong.", null));

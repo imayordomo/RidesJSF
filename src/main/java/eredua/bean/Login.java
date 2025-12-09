@@ -45,8 +45,10 @@ public class Login implements Serializable {
 
 	public String egiaztatu() {
 
-		if (facade.login(email, pasahitza))
+		if (facade.login(email, pasahitza)) {
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginUser", email);
 			return "Ok";
+		}
 		else
 			FacesContext.getCurrentInstance().addMessage(null, 
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "wrong mail or password", null));
