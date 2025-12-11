@@ -8,6 +8,7 @@ import org.primefaces.event.SelectEvent;
 
 import businessLogic.BLFacade;
 import configuration.UtilDate;
+import domain.Driver;
 import domain.Ride;
 import exceptions.RideAlreadyExistException;
 import exceptions.RideMustBeLaterThanTodayException;
@@ -26,10 +27,13 @@ public class CreateRide implements Serializable{
 	private int seats;
 	private float price;
 	BLFacade facade =FacadeBean.getBusinessLogic();
-	String driverEmail = (String) FacesContext.getCurrentInstance()
+	
+	private Driver getDriver(){
+        return (Driver) FacesContext.getCurrentInstance()
             .getExternalContext()
             .getSessionMap()
             .get("loginUser");
+    }
 	
 	public CreateRide() {
 		
@@ -102,8 +106,15 @@ public class CreateRide implements Serializable{
 	}
 	
 	public void createRide() {
+		Driver driver = getDriver();
+	    if (driver == null) {
+	        FacesContext.getCurrentInstance().addMessage(null, 
+	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "No user logged in", null));
+	        return;
+	    }
 		try {
-			Ride r=facade.createRide(departCity, arrivalCity, data, seats, price, driverEmail);
+			
+			Ride r=facade.createRide(departCity, arrivalCity, data, seats, price, driver.getEmail());
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ride sortua. ID:" + r.getRideNumber()));
 		} catch (RideMustBeLaterThanTodayException e) {
 			System.out.print("Bidaia gaurgo egunaren ondoren izan beharko litzake");

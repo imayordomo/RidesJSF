@@ -1,6 +1,7 @@
 package domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
@@ -22,8 +23,11 @@ public class Driver implements Serializable {
 	private String email;
 	private String name; 
 	private String password;
-	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST, mappedBy="driver")
+	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.PERSIST, mappedBy="driver")
 	private List<Ride> rides=new Vector<Ride>();
+	
+	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.PERSIST, mappedBy="driver")
+	private List<Car> cars=new Vector<Car>();
 
 	public Driver() {
 		super();
@@ -127,5 +131,23 @@ public class Driver implements Serializable {
 			return r;
 		} else return null;
 	}
-	
+	public List<Car> getCars() {
+        if (cars == null) {
+            cars = new ArrayList<>();
+        }
+        return cars;
+    }
+	public void setCars(List<Car> cars) {
+		this.cars = cars;
+	}
+	public boolean hasCar(int plate) {
+		if (cars == null) return false;
+	    for (Car c : cars) {
+	        if (c.getNumberPlate() == plate) {
+	            return true;
+	        }
+	    }
+	    return false; 
+	}
+
 }

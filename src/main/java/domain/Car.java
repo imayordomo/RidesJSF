@@ -1,4 +1,4 @@
-/*package domain;
+package domain;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -8,21 +8,22 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
 public class Car {
-	private static final long serialVersionUID = 1L;
 	@Id
-	private String numberPlate;// numberPlate
+	private int numberPlate;// numberPlate
 	private int nplaces;
 	@ManyToOne
+	@JoinColumn(name="driver_email")
 	private Driver driver;
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@OneToMany(mappedBy = "car", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST) //Ez kargatzeko ride guztiak eta ez sortzeko erdiko taula
 	private List<Ride> rides = new LinkedList<Ride>();
 
-	public Car(String matricula, int nplaces, Driver d) {
+	public Car(int matricula, int nplaces, Driver d) {
 		this.numberPlate = matricula;
 		this.nplaces = nplaces;
 		this.driver = d;
@@ -32,12 +33,12 @@ public class Car {
 		super();
 	}
 
-	public String getNumberPlate() {
+	public int getNumberPlate() {
 		return numberPlate;
 	}
 
-	public void setNumberPlate(String matricula) {
-		this.numberPlate = matricula;
+	public void setNumberPlate(int plate) {
+		this.numberPlate = plate;
 	}
 
 	public int getNplaces() {
@@ -81,8 +82,7 @@ public class Car {
 	}
 
 	public String toString() {
-		return numberPlate;
+		return Integer.toString(numberPlate) + " " + Integer.toString(nplaces);
 	}
 
 }
-*/

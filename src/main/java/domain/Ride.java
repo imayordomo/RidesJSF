@@ -27,6 +27,9 @@ public class Ride implements Serializable {
 	@ManyToOne
     @JoinColumn(name = "driver_email")
 	private Driver driver;  
+	@ManyToOne
+	@JoinColumn(name="car_plate")
+	private Car car;
 	
 	public Ride(){
 		super();
