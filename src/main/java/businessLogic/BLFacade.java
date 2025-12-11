@@ -5,8 +5,10 @@ import java.util.List;
 
 //import domain.Booking;
 import domain.Ride;
+import domain.Car;
 import domain.Driver;
 import exceptions.RideMustBeLaterThanTodayException;
+import exceptions.CarAlreadyExistException;
 import exceptions.RideAlreadyExistException;
  
 /**
@@ -75,5 +77,10 @@ public interface BLFacade  {
 	 public boolean login(String email, String password);
 	 
 	 public boolean register(String izena, String email, String pasahitza);
+	 
+	 public  Driver getDriver(String email);
+	 
+	 public void addCar(String email, int plate, int seats) throws CarAlreadyExistException;
 
+	 public List<Car> getCars(String email);
 }

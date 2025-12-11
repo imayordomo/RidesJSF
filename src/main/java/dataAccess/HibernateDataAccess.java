@@ -10,9 +10,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import configuration.UtilDate;
+import domain.Car;
 import domain.Driver;
 import domain.Ride;
 import eredua.JPAUtil;
+import exceptions.CarAlreadyExistException;
 import exceptions.RideAlreadyExistException;
 import exceptions.RideMustBeLaterThanTodayException;
 
@@ -84,7 +86,7 @@ public class HibernateDataAccess {
 		EntityManager db = getEntityManager();
 		try {
 			Long query = (Long) db.createQuery("SELECT count(r) FROM Ride r").getSingleResult();
-			
+
 			if (query > 0) {
 				return true;
 			} else {
@@ -239,40 +241,99 @@ public class HibernateDataAccess {
 			db.close();
 		}
 	}
-	
+
 	public boolean login(String email, String password) {
-	    EntityManager em = JPAUtil.getEntityManager();
-	    try {
-	        Driver dr = em.find(Driver.class, email);
-	        return dr != null && (password.equals(dr.getPassword()));
-	    } finally {
-	        em.close();
-	    }
+		EntityManager em = JPAUtil.getEntityManager();
+		try {
+			Driver dr = em.find(Driver.class, email);
+			return dr != null && (password.equals(dr.getPassword()));
+		} finally {
+			em.close();
+		}
 	}
-	
+
 	public boolean register(String name, String email, String password) {
-	    EntityManager em = JPAUtil.getEntityManager();
+		EntityManager em = JPAUtil.getEntityManager();
 
-	    try {
-	        if (em.find(Driver.class, email) != null) return false;
+		try {
+			if (em.find(Driver.class, email) != null)
+				return false;
 
-	        em.getTransaction().begin();
+			em.getTransaction().begin();
 
-	        Driver d = new Driver();
-	        d.setEmail(email);
-	        d.setName(name);
-	        d.setPassword(password);
-	        em.persist(d);
-	        em.getTransaction().commit();
-	        return true;
+			Driver d = new Driver();
+			d.setEmail(email);
+			d.setName(name);
+			d.setPassword(password);
+			em.persist(d);
+			em.getTransaction().commit();
+			return true;
 
-	    } catch(Exception ex) {
-	        if (em.getTransaction().isActive()) em.getTransaction().rollback();
-	        return false;
+		} catch (Exception ex) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			return false;
 
-	    } finally {
-	        em.close();
-	    }
+		} finally {
+			em.close();
+		}
 	}
 
+	public Driver getDriver(String email) {
+		EntityManager em = JPAUtil.getEntityManager();
+		try {
+			return em.find(Driver.class, email);
+		} finally {
+			em.close();
+		}
+	}
+
+	public void addCar(String email, int plate, int seats) throws CarAlreadyExistException{
+		EntityManager em = JPAUtil.getEntityManager();
+		try {
+			em.getTransaction().begin();
+			
+			Driver driver = em.createQuery("SELECT d FROM Driver d WHERE d.email = :email", Driver.class)
+					.setParameter("email", email).getSingleResult();
+			
+			if (driver.hasCar(plate)) {
+				em.getTransaction().commit();
+				throw new CarAlreadyExistException();
+			}
+			
+			Car car = new Car();
+			car.setNumberPlate(plate);
+			car.setNplaces(seats);
+			car.setDriver(driver);
+
+			em.persist(car);
+
+			em.getTransaction().commit();
+		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			em.close();
+		}
+	}
+
+	public List<Car> getCars(String email) {
+		EntityManager em = JPAUtil.getEntityManager();
+		try {
+			TypedQuery<Car> query = em.createQuery("SELECT c FROM Driver p JOIN p.cars c WHERE p.email = :email",
+					Car.class);
+			query.setParameter("email", email);
+			return query.getResultList();
+		} catch (Exception e) {
+			if (em.getTransaction().isActive())
+				em.getTransaction().rollback();
+			e.printStackTrace();
+			throw e;
+		} finally {
+			em.close();
+		}
+
+	}
 }

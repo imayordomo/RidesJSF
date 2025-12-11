@@ -22,4 +22,7 @@ public class Home implements Serializable{
 	    FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 	    return "Login";
 	}
+	public String moveAddCar() {
+	    return "AddCar";
+	}
 }

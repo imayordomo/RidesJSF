@@ -6,8 +6,10 @@ import java.util.ResourceBundle;
 
 import dataAccess.HibernateDataAccess;
 import domain.Ride;
+import domain.Car;
 import domain.Driver;
 import exceptions.RideMustBeLaterThanTodayException;
+import exceptions.CarAlreadyExistException;
 import exceptions.RideAlreadyExistException;
 
 /**
@@ -89,5 +91,18 @@ public class BLFacadeImplementation implements BLFacade {
 	
 	public boolean register(String izena, String email, String pasahitza) {
 		return dbManager.register(izena, email, pasahitza);
+	}
+	
+	@Override
+	public Driver getDriver(String email) {
+		return dbManager.getDriver(email);
+	}
+	
+	public void addCar(String email, int plate, int seats) throws CarAlreadyExistException{
+		dbManager.addCar(email, plate, seats);
+	}
+	
+	public List<Car> getCars(String email){
+		return dbManager.getCars(email);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.*;
 import org.primefaces.event.SelectEvent;
 
 import businessLogic.BLFacade;
+import domain.Driver;
 import eredua.bean.FacadeBean;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
@@ -46,7 +47,8 @@ public class Login implements Serializable {
 	public String egiaztatu() {
 
 		if (facade.login(email, pasahitza)) {
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginUser", email);
+			Driver d = facade.getDriver(email);
+			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("loginUser", d);
 			return "Ok";
 		}
 		else
