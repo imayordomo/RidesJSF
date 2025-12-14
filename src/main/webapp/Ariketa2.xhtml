@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Query Rides</title>
+</h:head>
+
+<h:body>
+	<f:view>
+		<h3>Query Rides</h3>
+		<h:form id="queryRidesFormAriketa2">
+			<table style="margin: auto;">
+				<tr>
+					<td><p:dataTable id="taulaRidesPosibleak"
+							value="#{queryRides.rideslist}" var="item" selectionMode="single"
+							selection="#{queryRides.ride}" border="1" rowKey="#{item.rideNumber}">
+							<f:facet name="header">Rides on selected day:</f:facet>
+							
+							<p:column headerText="DepartCity">#{item.from}</p:column>
+							<p:column headerText="ArrivalCity">#{item.to}</p:column>
+							<p:column headerText="Driver email">#{item.driver.email}</p:column>
+							<p:column headerText="Price">#{item.price}</p:column>
+							<!--  <p:column headerText="Price">#{item.numberPlate}</p:column> -->
+						</p:dataTable></td>
+				</tr>
+			</table>
+		</h:form>
+		<h:messages id="mezuak" style="color:blue" />
+	</f:view>
+</h:body>
+</html>

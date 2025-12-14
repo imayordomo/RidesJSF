@@ -66,18 +66,11 @@
 					<td><p:dataTable id="taulaRidesPosibleak"
 							value="#{queryRides.rideslist}" var="item" selectionMode="single"
 							selection="#{queryRides.ride}" border="1" rowKey="#{item.rideNumber}">
-
-							<!-- Para cuando queramos comprar el viaje
-									
-									<p:ajax event="rowSelect" listener="#{queryRides.onEventSelect}"
-										update=":nireForm:aukeratua :nireForm:mezuak :nireForm:zerrenda"></p:ajax>
-										-->
-
 							<f:facet name="header">Rides on selected day:</f:facet>
 							<p:column headerText="Driver">#{item.driver.email}</p:column>
 							<p:column headerText="Seats">#{item.nPlaces}</p:column>
 							<p:column headerText="Price">#{item.price}</p:column>
-							
+							<!--  <p:column headerText="Price">#{item.numberPlate}</p:column> -->
 						</p:dataTable></td>
 				</tr>
 			</table>

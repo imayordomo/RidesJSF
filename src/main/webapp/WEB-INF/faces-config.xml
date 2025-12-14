@@ -65,6 +65,22 @@ https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd"
 		<display-name>Login.xhtml</display-name>
 		<from-view-id>/Login.xhtml</from-view-id>
 		<navigation-case>
+			<from-outcome>ariketa1</from-outcome>
+			<to-view-id>/Ariketa1.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Ariketa1.xhtml</display-name>
+		<from-view-id>/Ariketa1.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>ariketa2</from-outcome>
+			<to-view-id>/Ariketa2.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	<navigation-rule>
+		<display-name>Login.xhtml</display-name>
+		<from-view-id>/Login.xhtml</from-view-id>
+		<navigation-case>
 			<from-outcome>Ok</from-outcome>
 			<to-view-id>/Home.xhtml</to-view-id>
 		</navigation-case>

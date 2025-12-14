@@ -46,8 +46,9 @@ public interface BLFacade  {
  	 * @throws RideAlreadyExistException if the same ride already exists for the driver
 	 */
    
-   public Ride createRide( String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideMustBeLaterThanTodayException, RideAlreadyExistException;
+  // public Ride createRide( String from, String to, Date date, int nPlaces, float price, String driverEmail) throws RideMustBeLaterThanTodayException, RideAlreadyExistException;
 	
+   public Ride createRide( String from, String to, Date date, int nPlaces, float price, String driverEmail, Car car) throws RideMustBeLaterThanTodayException, RideAlreadyExistException;
 	
 	/**
 	 * This method retrieves the rides from two locations on a given date 
@@ -76,11 +77,13 @@ public interface BLFacade  {
 
 	 public boolean login(String email, String password);
 	 
-	 public boolean register(String izena, String email, String pasahitza);
+	 public String register(String izena, String email, String pasahitza);
 	 
 	 public  Driver getDriver(String email);
 	 
 	 public void addCar(String email, int plate, int seats) throws CarAlreadyExistException;
 
 	 public List<Car> getCars(String email);
+
+	 public List<Ride> getRides(Date data);
 }

@@ -67,7 +67,11 @@ public class Driver implements Serializable {
 		this.name = name;
 	}
 
-	
+	public Car addCar(int numberPlate, int nPlace)  {
+        Car car=new Car(numberPlate, nPlace,this);
+        cars.add(car);
+        return car;
+	}
 	
 	public String toString(){
 		return email+";"+name+rides;
@@ -80,8 +84,8 @@ public class Driver implements Serializable {
 	 * @param betMinimum of that question
 	 * @return Bet
 	 */
-	public Ride addRide(String from, String to, Date date, int nPlaces, float price)  {
-        Ride ride=new Ride(from,to,date,nPlaces,price, this);
+	public Ride addRide(String from, String to, Date date, int nPlaces, float price, Car car)  {
+        Ride ride=new Ride(from,to,date,nPlaces,price, this, car);
         rides.add(ride);
         return ride;
 	}

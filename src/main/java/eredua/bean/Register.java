@@ -54,17 +54,22 @@ public class Register implements Serializable {
 
 	public String erregistratu() {
 
-		if (facade.register(name, email, pasahitza)) {
+		String emaitza = facade.register(name, email, pasahitza);
+		if (emaitza.equals("SUCCESS")) {
 			Driver d = facade.getDriver(email);
 	        FacesContext.getCurrentInstance().getExternalContext()
 	            .getSessionMap().put("loginUser", d);
 			return "Ok";
 		}
-		else
+		else if (emaitza.equals("EMAIL_ALREADY_EXISTS")) {
+			FacesContext.getCurrentInstance().addMessage(null, 
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "invalid email", null));
+	        
+		} else {
 			FacesContext.getCurrentInstance().addMessage(null, 
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "check the data, something is wrong.", null));
-	        return null;
-
+		}
+		return null;
 	}
 	public String moveLogin() {
 		return "Login";

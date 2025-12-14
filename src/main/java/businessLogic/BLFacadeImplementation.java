@@ -49,14 +49,20 @@ public class BLFacadeImplementation implements BLFacade {
 		return targetCities;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	/*
 
 	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail)
 			throws RideMustBeLaterThanTodayException, RideAlreadyExistException {
 
 		Ride ride = dbManager.createRide(from, to, date, nPlaces, price, driverEmail);
+		return ride;
+	};
+	*/
+	
+	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail, Car car)
+			throws RideMustBeLaterThanTodayException, RideAlreadyExistException {
+
+		Ride ride = dbManager.createRide(from, to, date, nPlaces, price, driverEmail, car);
 		return ride;
 	};
 
@@ -69,6 +75,12 @@ public class BLFacadeImplementation implements BLFacade {
 		return rides;
 	}
 
+	//Ariketarentzako
+	public List<Ride> getRides(Date date) {
+		List<Ride> rides = dbManager.getRides(date);
+		return rides;
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -89,7 +101,7 @@ public class BLFacadeImplementation implements BLFacade {
 		return dbManager.login(email,password);
 	}
 	
-	public boolean register(String izena, String email, String pasahitza) {
+	public String register(String izena, String email, String pasahitza) {
 		return dbManager.register(izena, email, pasahitza);
 	}
 	

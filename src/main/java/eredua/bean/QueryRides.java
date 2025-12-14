@@ -17,7 +17,7 @@ import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 
 @Named("queryRides")
-@ViewScoped
+@SessionScoped
 public class QueryRides implements Serializable{
 	
 	private List<Ride> rideslist; 
@@ -27,6 +27,7 @@ public class QueryRides implements Serializable{
 	private String departCity; 
 	private List<String> arrivalCityList = new ArrayList<String>();
 	private String arrivalCity; 
+	//private int numberPlate;
 	
 	private BLFacade facade = FacadeBean.getBusinessLogic();
 	
@@ -102,6 +103,15 @@ public class QueryRides implements Serializable{
 		return "Home";
 	}
 	
+	public String moveAriketa1() {
+		return "ariketa1";
+	}
+	
+	public String moveAriketa2() {
+		searchByDateTable();
+		return "ariketa2";
+	}
+	
 	public void onDateSelect(SelectEvent event) {
 		//this.data = (Date) event.getObject();
 		this.reloadRidesTable();
@@ -126,6 +136,16 @@ public class QueryRides implements Serializable{
 	    } else {
 	        rideslist = new ArrayList<>();
 	    }
+		
+	}
+	
+	public void searchByDateTable() {
+		if (data != null) {
+	        rideslist = facade.getRides(data);
+	    } else {
+	        rideslist = new ArrayList<>();
+	    }
+		System.out.print(rideslist);
 	}
 	
 }

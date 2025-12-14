@@ -48,28 +48,41 @@ public class HibernateDataAccess {
 					year += 1;
 				}
 
-				// Create drivers
+				// 1) Adding drivers
 				Driver driver1 = new Driver("driver1@gmail.com", "Aitor Fernandez");
 				Driver driver2 = new Driver("driver2@gmail.com", "Ane Gaztañaga");
 				Driver driver3 = new Driver("a", "a", "a");
-
-				// Create rides
-				driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 4, 7);
-				driver1.addRide("Donostia", "Gazteiz", UtilDate.newDate(year, month, 6), 4, 8);
-				driver1.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 4, 4);
-
-				driver1.addRide("Donostia", "Iruña", UtilDate.newDate(year, month, 7), 4, 8);
-
-				driver2.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 3, 3);
-				driver2.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 2, 5);
-				driver2.addRide("Eibar", "Gasteiz", UtilDate.newDate(year, month, 6), 2, 5);
-
-				driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 14), 1, 3);
 
 				db.persist(driver1);
 				db.persist(driver2);
 				db.persist(driver3);
 
+				// 2) Adding Cars
+				Car car1 = new Car(11,3, driver1);
+				Car car2 = new Car(12,4, driver2);
+				Car car3 = new Car(13,5, driver3);
+				
+				driver1.getCars().add(car1);
+				driver2.getCars().add(car2);
+				driver3.getCars().add(car3);
+
+				db.persist(car1);
+				db.persist(car2);
+				db.persist(car3);
+
+				// 3) Adding Rides
+				driver1.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 4, 7, car1);
+				driver1.addRide("Donostia", "Gazteiz", UtilDate.newDate(year, month, 6), 4, 8, car1);
+				driver1.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 4, 4, car1);
+				driver1.addRide("Donostia", "Iruña", UtilDate.newDate(year, month, 7), 4, 8, car1);
+
+				driver2.addRide("Donostia", "Bilbo", UtilDate.newDate(year, month, 15), 3, 3, car2);
+				driver2.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 25), 2, 5, car2);
+				driver2.addRide("Eibar", "Gasteiz", UtilDate.newDate(year, month, 6), 2, 5, car2);
+
+				driver3.addRide("Bilbo", "Donostia", UtilDate.newDate(year, month, 14), 1, 3, car3);
+
+				
 				db.getTransaction().commit();
 				System.out.println("DB initialized");
 			} catch (Exception e) {
@@ -143,10 +156,10 @@ public class HibernateDataAccess {
 	 * @throws RideAlreadyExistException         if the same ride already exists for
 	 *                                           the driver
 	 */
-	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail)
+	public Ride createRide(String from, String to, Date date, int nPlaces, float price, String driverEmail, Car car)
 			throws RideAlreadyExistException, RideMustBeLaterThanTodayException {
 		System.out.println(">> DataAccess: createRide=> from= " + from + " to= " + to + " driver=" + driverEmail
-				+ " date " + date);
+				+ " date " + date + "car" + car.getNplaces());
 
 		if (new Date().compareTo(date) > 0) {
 			throw new RideMustBeLaterThanTodayException(
@@ -162,8 +175,8 @@ public class HibernateDataAccess {
 				throw new RideAlreadyExistException(
 						ResourceBundle.getBundle("Etiquetas").getString("DataAccess.RideAlreadyExist"));
 			}
-			System.out.println("crea addRide");
-			Ride ride = driver.addRide(from, to, date, nPlaces, price);
+			
+			Ride ride = driver.addRide(from, to, date, nPlaces, price, car);
 			// next instruction can be obviated
 			db.persist(driver);
 			db.getTransaction().commit();
@@ -197,6 +210,22 @@ public class HibernateDataAccess {
 		query.setParameter(1, from);
 		query.setParameter(2, to);
 		query.setParameter(3, date);
+		List<Ride> rides = query.getResultList();
+		for (Ride ride : rides) {
+			res.add(ride);
+		}
+		db.close();
+		return res;
+	}
+	
+	public List<Ride> getRides(Date date) {
+		System.out.println(">> DataAccess: getRides by Date=> date " + date);
+		EntityManager db = getEntityManager();
+
+		List<Ride> res = new ArrayList<Ride>();
+		TypedQuery<Ride> query = db.createQuery("SELECT r FROM Ride r WHERE r.date=?1",
+				Ride.class);
+		query.setParameter(1, date);
 		List<Ride> rides = query.getResultList();
 		for (Ride ride : rides) {
 			res.add(ride);
@@ -252,12 +281,12 @@ public class HibernateDataAccess {
 		}
 	}
 
-	public boolean register(String name, String email, String password) {
+	public String register(String name, String email, String password) {
 		EntityManager em = JPAUtil.getEntityManager();
 
 		try {
 			if (em.find(Driver.class, email) != null)
-				return false;
+				return "EMAIL_ALREADY_EXISTS";
 
 			em.getTransaction().begin();
 
@@ -267,12 +296,12 @@ public class HibernateDataAccess {
 			d.setPassword(password);
 			em.persist(d);
 			em.getTransaction().commit();
-			return true;
+			return "SUCCESS";
 
 		} catch (Exception ex) {
 			if (em.getTransaction().isActive())
 				em.getTransaction().rollback();
-			return false;
+			return "ERROR";
 
 		} finally {
 			em.close();
@@ -293,13 +322,15 @@ public class HibernateDataAccess {
 		try {
 			em.getTransaction().begin();
 			
-			Driver driver = em.createQuery("SELECT d FROM Driver d WHERE d.email = :email", Driver.class)
-					.setParameter("email", email).getSingleResult();
-			
-			if (driver.hasCar(plate)) {
+			if (em.find(Car.class, plate) != null) {
 				em.getTransaction().commit();
 				throw new CarAlreadyExistException();
 			}
+			
+			Driver driver = em.createQuery("SELECT d FROM Driver d WHERE d.email = :email", Driver.class)
+					.setParameter("email", email).getSingleResult();
+			
+			
 			
 			Car car = new Car();
 			car.setNumberPlate(plate);

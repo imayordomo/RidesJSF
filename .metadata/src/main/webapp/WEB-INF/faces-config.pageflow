@@ -4,9 +4,11 @@
   <nodes xsi:type="pageflow:PFPage" name="Home.xhtml" x="554" y="946" id="pf17653096189403" referenceLink="//@navigationRule.10/@navigationCase.0/@toViewId|" outlinks="pf17653096189404 pf17653096189405 pf176531863258318 pf17653259973660" inlinks="pf17653096189392 pf17653096189407 pf176531586585015 pf176531590778516 pf17653259973671" path="/Home.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="QueryRides.xhtml" x="338" y="562" id="pf17653096189408" referenceLink="//@navigationRule.3/@navigationCase.0/@toViewId|" outlinks="pf17653096189407" inlinks="pf17653096189405" path="/QueryRides.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="CreateRide.xhtml" x="770" y="946" id="pf17653096189409" referenceLink="//@navigationRule.2/@navigationCase.0/@toViewId|" inlinks="pf17653096189404" path="/CreateRide.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="Login.xhtml" x="338" y="946" id="pf176530991908811" referenceLink="//@navigationRule.8/@navigationCase.0/@toViewId|" outlinks="pf176530991908812 pf176531586585015" inlinks="pf176531055781814 pf176531863258318" path="/Login.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="Register.xhtml" x="122" y="1047" id="pf176530991908813" referenceLink="//@navigationRule.9/@fromViewId|" outlinks="pf176531055781814 pf176531590778516" inlinks="pf176530991908812" path="/Register.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="Login.xhtml" x="338" y="946" id="pf176530991908811" referenceLink="//@navigationRule.8/@fromViewId|" outlinks="pf176530991908812 pf176531586585015 pf17655376948160" inlinks="pf176531055781814 pf176531863258318" path="/Login.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="Register.xhtml" x="122" y="1047" id="pf176530991908813" referenceLink="//@navigationRule.7/@navigationCase.0/@toViewId|" outlinks="pf176531055781814 pf176531590778516" inlinks="pf176530991908812" path="/Register.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="AddCar.xhtml" x="338" y="1351" id="pf17653259973672" referenceLink="//@navigationRule.10/@fromViewId|" outlinks="pf17653259973671" inlinks="pf17653259973660" path="/AddCar.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="Ariketa1.xhtml" id="pf17655376948171" referenceLink="//@navigationRule.8/@fromViewId|" outlinks="pf17655379959042" inlinks="pf17655376948160" path="/Ariketa1.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="Ariketa2.xhtml" id="pf17655379959043" referenceLink="//@navigationRule.8/@navigationCase.0/@toViewId|" inlinks="pf17655379959042" path="/Ariketa2.xhtml"/>
   <links id="pf17653096189392" target="pf17653096189403" source="pf17653096189391" outcome="Home"/>
   <links id="pf17653096189407" target="pf17653096189403" source="pf17653096189408" outcome="Home"/>
   <links id="pf17653096189404" target="pf17653096189409" source="pf17653096189403" outcome="createRide"/>
@@ -18,4 +20,6 @@
   <links id="pf176531863258318" target="pf176530991908811" source="pf17653096189403" outcome="Login"/>
   <links id="pf17653259973671" target="pf17653096189403" source="pf17653259973672" outcome="home"/>
   <links id="pf17653259973660" target="pf17653259973672" source="pf17653096189403" outcome="AddCar"/>
+  <links id="pf17655376948160" target="pf17655376948171" source="pf176530991908811" outcome="ariketa1"/>
+  <links id="pf17655379959042" target="pf17655379959043" source="pf17655376948171" outcome="ariketa2"/>
 </pageflow:Pageflow>
