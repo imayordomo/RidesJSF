@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Ariketa1</title>
+</h:head>
+
+<h:body>
+	<f:view>
+		<h3>Query Rides by Data</h3>
+		<h:form id="queryRidesFormAriketa1">
+			<table style="margin: 0 auto;">
+				<tr>
+					<td style="vertical-align: top; padding-left: 20px;">
+						<table>
+							<tr>
+								<td>Data:</td>
+							</tr>
+							<tr>
+								<td><p:calendar id="data" value="#{queryRides.data}"
+										navigator="true" mode="inline">
+										<p:ajax event="dateSelect"
+											listener="#{queryRides.onDateSelect}" process="@this" update=" mezuak" />
+									</p:calendar></td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<td><h:commandButton value="BIDAI GUZTIAK ERAKUTSI"
+					action="#{queryRides.moveAriketa2}" /></td>
+			
+		</h:form>
+
+		<h:messages id="mezuak" style="color:blue" />
+	</f:view>
+</h:body>
+</html>

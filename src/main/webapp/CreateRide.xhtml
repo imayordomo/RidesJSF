@@ -28,18 +28,19 @@
                         <td><h:inputText id="arrivalCity" value="#{createRide.arrivalCity}" required="true" requiredMessage="Not depart city error."/></td>
                     </tr>
                     <tr>
-                        <td>Number of Seats:</td>
-                        <td>
-                            <h:inputText id="seats" value="#{createRide.seats}" required="true" validatorMessage="At least 1 seat." requiredMessage="At least 1 seat.">
-                                <f:convertNumber integerOnly="true" />
-                                <f:validateLongRange minimum="1" />
-                            </h:inputText>
-                        </td>
-                    </tr>
+								<td>Car:</td>
+								<!-- Combo box -->
+								<td><h:selectOneMenu id="carMenu"
+										value="#{createRide.numberPlate}" required="true" requiredMessage="No car selected">
+										<f:selectItem itemLabel="CarPlate" itemValue="" />
+										<f:selectItems value="#{createRide.carPlateList}" />
+		
+									</h:selectOneMenu></td>
+							</tr>
                     <tr>
                         <td>Price per Seat:</td>
                         <td>
-                            <h:inputText id="price" value="#{createRide.price}" required="true" validatorMessage="At least the price should be 1.0." requiredMessage="At least the price should be 1.0.">
+                            <h:inputText id="price" value="#{createRide.price}" required="true" validatorMessage="At least, the price should be 1.0." requiredMessage="At least the price should be 1.0.">
                                
                                 <f:validateLongRange minimum="1" />
                             </h:inputText>

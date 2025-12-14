@@ -1,13 +1,16 @@
 package eredua.bean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.primefaces.event.SelectEvent;
 
 import businessLogic.BLFacade;
 import configuration.UtilDate;
+import domain.Car;
 import domain.Driver;
 import domain.Ride;
 import exceptions.RideAlreadyExistException;
@@ -26,7 +29,10 @@ public class CreateRide implements Serializable{
 	private String arrivalCity;
 	private int seats;
 	private float price;
+	private String numberPlate;
+	private List<String> carPlateList = new ArrayList<String>();
 	BLFacade facade =FacadeBean.getBusinessLogic();
+	private Car car;
 	
 	private Driver getDriver(){
         return (Driver) FacesContext.getCurrentInstance()
@@ -38,7 +44,50 @@ public class CreateRide implements Serializable{
 	public CreateRide() {
 		
 	}
-		
+	
+	public String getNumberPlate() {
+		return numberPlate;
+	}
+
+	public void setNumberPlate(String numberPlate) {
+		this.numberPlate = numberPlate;
+		Driver driver = getDriver();
+	    if (driver == null) {
+	        FacesContext.getCurrentInstance().addMessage(null, 
+	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "No user logged in", null));
+	    }
+		List<Car> cars = driver.getCars();
+		for (Car c : cars) {
+			if(String.valueOf(c.getNumberPlate()).equals(numberPlate)) {
+				seats = c.getNplaces();
+				car = c;
+			}
+			break;
+		}
+	}
+
+
+	public void setCarPlateList(List<String> carPlateList) {
+		this.carPlateList = carPlateList;
+	}
+	
+	public List<String> getCarPlateList(){
+		Driver driver = getDriver();
+	    if (driver == null) {
+	        FacesContext.getCurrentInstance().addMessage(null, 
+	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "No user logged in", null));
+	        return null;
+	    }
+	    
+	    List<Car> cars = driver.getCars();
+	    List<String> plateList= new ArrayList<String>();
+	    for (Car c : cars) {
+	    	plateList.add(String.valueOf(c.getNumberPlate()));
+	    }
+	    carPlateList = plateList;
+	    return plateList;
+	}
+	
 	
 	public String getDepartCity() {
 		return departCity;
@@ -112,9 +161,14 @@ public class CreateRide implements Serializable{
 	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "No user logged in", null));
 	        return;
 	    }
+	    if (numberPlate.equals("")) {
+	        FacesContext.getCurrentInstance().addMessage(null, 
+	            new FacesMessage(FacesMessage.SEVERITY_ERROR, "No car selected. If you don't have any, add it on the home menu.", null));
+	        return;
+	    }
 		try {
 			
-			Ride r=facade.createRide(departCity, arrivalCity, data, seats, price, driver.getEmail());
+			Ride r=facade.createRide(departCity, arrivalCity, data, seats, price, driver.getEmail(), car);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Ride sortua. ID:" + r.getRideNumber()));
 		} catch (RideMustBeLaterThanTodayException e) {
 			System.out.print("Bidaia gaurgo egunaren ondoren izan beharko litzake");
@@ -125,8 +179,4 @@ public class CreateRide implements Serializable{
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
 }

@@ -45,7 +45,16 @@ public class Ride implements Serializable {
 		this.price=price;
 		this.driver = driver;
 	}
-
+	public Ride( String from, String to, Date date, int nPlaces, float price, Driver driver, Car car) {
+		super();
+		this.from = from;
+		this.to = to;
+		this.nPlaces = nPlaces;
+		this.date=date;
+		this.price=price;
+		this.driver = driver;
+		this.car = car;
+	}
 	
 
 	public Ride(String from, String to,  Date date, int nPlaces, float price, Driver driver) {
